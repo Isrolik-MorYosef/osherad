@@ -1,1 +1,63 @@
-<h1>Osher Ad</h1>
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUT Request Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: center;
+    }
+    #response {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+      padding: 10px;
+      max-width: 90%;
+      margin: auto;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>תוצאות הבקשות</h1>
+  <div id="response">טוען...</div>
+
+  <script>
+    const API_URL = 'https://scores.clap.co.il/api/score/9dc8b75b-3a82-4673-a261-fd86de098eb1';
+    let lastScore = 209475;
+
+    async function makePutRequest() {
+      lastScore += 360;
+
+      try {
+        const response = await axios.put(API_URL, {
+          score: lastScore,
+          completion_time: 0,
+          gamename: "osherad_users_01"
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // Update the response on the page
+        document.getElementById('response').textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        document.getElementById('response').textContent = 
+          `Error: ${error.response?.data || error.message}`;
+      }
+
+      const randomInterval = Math.floor(3 * 60 * 1000);
+      setTimeout(makePutRequest, randomInterval + Math.random());
+    }
+
+    // Initial call
+    makePutRequest();
+  </script>
+</body>
+</html>
